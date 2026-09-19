@@ -13,10 +13,10 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 const roles = [
-  { value: 'dispatcher', label: 'Dispatcher', desc: 'Plan routes, manage fleet, create orders' },
-  { value: 'admin', label: 'Admin', desc: 'Full platform access and analytics' },
-  { value: 'driver', label: 'Driver', desc: 'Navigation, status updates, feedback' },
-  { value: 'customer', label: 'Customer', desc: 'Track orders and delivery status' },
+  { value: 'dispatcher', label: 'Dispetcher', desc: "Marshrutlar rejalashtirish, avtopark va buyurtmalar boshqarish" },
+  { value: 'admin', label: 'Administrator', desc: "Platformaning to'liq imkoniyatlari va tahlil" },
+  { value: 'driver', label: 'Haydovchi', desc: 'Navigatsiya, holat yangilash va fikr bildirish' },
+  { value: 'customer', label: 'Mijoz', desc: 'Buyurtmalarni va yetkazish holatini kuzatish' },
 ];
 
 export default function SignupPage() {
@@ -42,12 +42,12 @@ export default function SignupPage() {
     setLoading(true);
     const { error, needsEmailConfirmation } = await signUp(email, password, name, role, company);
     if (error) {
-      toast({ title: 'Sign up failed', description: error, variant: 'destructive' });
+      toast({ title: "Ro'yxatdan o'tish amalga oshmadi", description: error, variant: 'destructive' });
     } else if (needsEmailConfirmation) {
       setAwaitingConfirmation(true);
-      toast({ title: 'Almost there!', description: 'Check your email to confirm your account.' });
+      toast({ title: 'Deyarli tayyor!', description: 'Emailingizni tekshirib, akkauntni tasdiqlang.' });
     } else {
-      toast({ title: 'Account created!', description: 'Welcome to Karvonboshi. Redirecting to dashboard...' });
+      toast({ title: 'Akkaunt yaratildi!', description: "Karvonboshiga xush kelibsiz. Boshqaruv paneliga o'tyapmiz..." });
       router.push('/dashboard');
     }
     setLoading(false);
@@ -62,12 +62,12 @@ export default function SignupPage() {
               <Route className="w-5 h-5 text-primary-foreground" />
             </div>
           </Link>
-          <h1 className="text-2xl font-bold tracking-tight">Create your account</h1>
-          <p className="text-sm text-muted-foreground mt-1">Start optimizing routes across Uzbekistan</p>
+          <h1 className="text-2xl font-bold tracking-tight">Akkaunt yarating</h1>
+          <p className="text-sm text-muted-foreground mt-1">O'zbekiston bo'ylab marshrutlarni optimallashtirishni boshlang</p>
         </div>
 
         {awaitingConfirmation ? (
-          <Card className="p-8 shadow-lg text-center space-y-4">
+          <Card className="p-8 shadow-lg text-center space-y-4" data-testid="signup-await-confirmation">
             <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
               <Mail className="w-7 h-7 text-primary" />
             </div>
@@ -84,9 +84,9 @@ export default function SignupPage() {
           </Card>
         ) : (
         <Card className="p-6 shadow-lg max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin">
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" data-testid="signup-form">
             <div className="space-y-2">
-              <Label>Account Type</Label>
+              <Label>Akkaunt turi</Label>
               <div className="grid grid-cols-2 gap-2">
                 {roles.map((r) => (
                   <button
@@ -99,6 +99,7 @@ export default function SignupPage() {
                         ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
                         : 'border-border hover:border-primary/50'
                     )}
+                    data-testid={`signup-role-${r.value}`}
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="text-sm font-medium">{r.label}</span>
@@ -111,51 +112,51 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name">To'liq ism</Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input id="name" placeholder="Akmal Karimov" value={name} onChange={(e) => setName(e.target.value)} required className="pl-9" />
+                <Input id="name" placeholder="Akmal Karimov" value={name} onChange={(e) => setName(e.target.value)} required className="pl-9" data-testid="signup-name-input" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Elektron pochta</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input id="email" type="email" placeholder="you@company.uz" value={email} onChange={(e) => setEmail(e.target.value)} required className="pl-9" />
+                <Input id="email" type="email" placeholder="siz@kompaniya.uz" value={email} onChange={(e) => setEmail(e.target.value)} required className="pl-9" data-testid="signup-email-input" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Parol</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input id="password" type="password" placeholder="At least 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} className="pl-9" />
+                <Input id="password" type="password" placeholder="Kamida 8 belgi" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} className="pl-9" data-testid="signup-password-input" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company">Company (optional)</Label>
+              <Label htmlFor="company">Kompaniya (ixtiyoriy)</Label>
               <div className="relative">
                 <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input id="company" placeholder="Logistics Co." value={company} onChange={(e) => setCompany(e.target.value)} className="pl-9" />
+                <Input id="company" placeholder="Logistics Co." value={company} onChange={(e) => setCompany(e.target.value)} className="pl-9" data-testid="signup-company-input" />
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading} data-testid="signup-submit-btn">
               {loading ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : (
                 <ArrowRight className="w-4 h-4 mr-2" />
               )}
-              Create Account
+              Akkaunt yaratish
             </Button>
           </form>
 
           <div className="mt-6 text-center text-sm">
-            Already have an account?{' '}
+            Akkauntingiz bormi?{' '}
             <Link href="/login" className="text-primary font-medium hover:underline">
-              Sign in
+              Kirish
             </Link>
           </div>
         </Card>

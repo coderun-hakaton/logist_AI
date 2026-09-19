@@ -1,0 +1,10 @@
+{
+  "name": "karvonboshi-frontend-shim",
+  "private": true,
+  "description": "Next.js ilovasi loyiha ildizida (/app) joylashgan. Bu papka supervisor 'frontend' dasturi /app/frontend ni kutgani uchun mavjud — buyruqlarni ildizga uzatadi.",
+  "scripts": {
+    "dev": "cd /app && npm run dev",
+    "build": "cd /app && npm run build",
+    "start": "cd /app && npm run start"
+  }
+}

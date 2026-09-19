@@ -30,9 +30,16 @@ export default function LoginPage() {
     setLoading(true);
     const { error } = await signIn(email, password);
     if (error) {
-      toast({ title: 'Sign in failed', description: error, variant: 'destructive' });
+      const isUnconfirmed = /not confirmed|email_not_confirmed/i.test(error);
+      toast({
+        title: isUnconfirmed ? 'Email tasdiqlanmagan' : 'Kirish amalga oshmadi',
+        description: isUnconfirmed
+          ? "Akkauntingiz email orqali tasdiqlanmagan. Emailingizdagi tasdiqlash havolasini bosing yoki administrator Supabase sozlamalarida \"Confirm email\"ni o'chirib qo'ysin."
+          : error,
+        variant: 'destructive',
+      });
     } else {
-      toast({ title: 'Welcome back!', description: 'Successfully signed in.' });
+      toast({ title: 'Xush kelibsiz!', description: 'Tizimga muvaffaqiyatli kirdingiz.' });
       router.push('/dashboard');
     }
     setLoading(false);
@@ -47,30 +54,31 @@ export default function LoginPage() {
               <Route className="w-5 h-5 text-primary-foreground" />
             </div>
           </Link>
-          <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
-          <p className="text-sm text-muted-foreground mt-1">Sign in to your Karvonboshi account</p>
+          <h1 className="text-2xl font-bold tracking-tight">Xush kelibsiz</h1>
+          <p className="text-sm text-muted-foreground mt-1">Karvonboshi akkauntingizga kiring</p>
         </div>
 
         <Card className="p-6 shadow-lg">
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" data-testid="login-form">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Elektron pochta</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@company.uz"
+                  placeholder="siz@kompaniya.uz"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="pl-9"
+                  data-testid="login-email-input"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Parol</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -81,25 +89,34 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="pl-9"
+                  data-testid="login-password-input"
                 />
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading} data-testid="login-submit-btn">
               {loading ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : (
                 <ArrowRight className="w-4 h-4 mr-2" />
               )}
-              Sign In
+              Kirish
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-primary font-medium hover:underline">
-              Sign up
-            </Link>
+          <div className="mt-6 text-center text-sm space-y-2">
+            <p>
+              Akkauntingiz yo&apos;qmi?{' '}
+              <Link href="/signup" className="text-primary font-medium hover:underline">
+                Ro&apos;yxatdan o&apos;tish
+              </Link>
+            </p>
+            <p className="text-muted-foreground">
+              Haydovchimisiz?{' '}
+              <Link href="/driver-apply" className="text-primary font-medium hover:underline">
+                Ariza topshiring
+              </Link>
+            </p>
           </div>
         </Card>
       </div>

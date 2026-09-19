@@ -8,6 +8,7 @@ export type CargoType = 'perishable' | 'fragile' | 'hazardous' | 'general';
 export type FuelType = 'diesel' | 'petrol' | 'gas' | 'electric';
 export type RestStopType = 'hotel' | 'restaurant' | 'gas_station' | 'parking' | 'complex';
 export type FeedbackType = 'road_condition' | 'incident' | 'suggestion' | 'rest_stop_review';
+export type DriverApplicationStatus = 'pending' | 'approved' | 'rejected';
 
 export interface Profile {
   id: string;
@@ -25,6 +26,7 @@ export interface Vehicle {
   id: string;
   owner_id: string;
   type: VehicleType;
+  brand: string | null;
   capacity: number;
   dimensions: string | null;
   license_plate: string;
@@ -165,6 +167,30 @@ export interface Feedback {
   created_at: string;
 }
 
+export interface DriverApplication {
+  id: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  password: string | null;
+  city: string | null;
+  experience_years: number | null;
+  has_vehicle: boolean;
+  car_brand: string | null;
+  car_plate: string | null;
+  capacity_kg: number | null;
+  license_categories: string | null;
+  license_image_url: string | null;
+  tech_passport_image_url: string | null;
+  status: DriverApplicationStatus;
+  driver_id: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  rejection_reason: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 // Route optimization types
 export interface RouteOptimizationInput {
   origin: { lat: number; lng: number; address: string };
@@ -225,6 +251,23 @@ export interface Database {
         Insert: Partial<Feedback>;
         Update: Partial<Feedback>;
       };
+      driver_applications: {
+        Row: DriverApplication;
+        Insert: Partial<DriverApplication>;
+        Update: Partial<DriverApplication>;
+      };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
     };
   };
 }

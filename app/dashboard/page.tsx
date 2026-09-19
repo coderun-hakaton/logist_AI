@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  Package, Truck, Clock, TrendingDown, ArrowUpRight, ArrowRight,
-  CircleDot, AlertCircle, CheckCircle2, Wrench, MapPin, Activity,
+  Package, Truck, TrendingDown, ArrowUpRight, ArrowRight,
+  CircleDot, MapPin, Activity,
 } from 'lucide-react';
 import { useAuth } from '@/components/auth-provider';
 import { Card } from '@/components/ui/card';
@@ -15,23 +15,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { UzbekistanMap } from '@/components/uzbekistan-map';
 import { supabase } from '@/lib/supabase';
 import { Order, Vehicle, OrderStatus, VehicleStatus, Waypoint } from '@/types/database';
-import { uzbekistanCities } from '@/lib/uzbekistan-data';
 import { cn } from '@/lib/utils';
-
-const statusConfig: Record<OrderStatus, { label: string; color: string; bg: string }> = {
-  pending: { label: 'Pending', color: 'text-muted-foreground', bg: 'bg-muted' },
-  assigned: { label: 'Assigned', color: 'text-blue-600', bg: 'bg-blue-100 dark:bg-blue-900/30' },
-  in_transit: { label: 'In Transit', color: 'text-amber-600', bg: 'bg-amber-100 dark:bg-amber-900/30' },
-  delivered: { label: 'Delivered', color: 'text-green-600', bg: 'bg-green-100 dark:bg-green-900/30' },
-  cancelled: { label: 'Cancelled', color: 'text-red-600', bg: 'bg-red-100 dark:bg-red-900/30' },
-  delayed: { label: 'Delayed', color: 'text-orange-600', bg: 'bg-orange-100 dark:bg-orange-900/30' },
-};
+import { orderStatusConfig } from '@/lib/order-labels';
 
 const vehicleStatusConfig: Record<VehicleStatus, { label: string; color: string }> = {
-  available: { label: 'Available', color: 'text-green-600' },
-  on_route: { label: 'On Route', color: 'text-blue-600' },
-  maintenance: { label: 'Maintenance', color: 'text-amber-600' },
-  offline: { label: 'Offline', color: 'text-red-600' },
+  available: { label: "Bo'sh", color: 'text-emerald-600' },
+  on_route: { label: "Yo'lda", color: 'text-blue-600' },
+  maintenance: { label: "Ta'mirda", color: 'text-amber-600' },
+  offline: { label: 'Rezervda', color: 'text-slate-600' },
 };
 
 export default function DashboardPage() {
@@ -58,7 +49,7 @@ export default function DashboardPage() {
         setOrders((ordersData as unknown as Order[]) || []);
         setVehicles((vehiclesData as unknown as Vehicle[]) || []);
       } catch (err) {
-        // Silent fail - empty dashboard is fine for new users
+        // Yangi foydalanuvchi uchun bo'sh panel — muammo emas
       } finally {
         setLoading(false);
       }
@@ -68,7 +59,7 @@ export default function DashboardPage() {
 
   const stats = [
     {
-      label: 'Total Orders',
+      label: 'Jami buyurtmalar',
       value: orders.length,
       icon: Package,
       color: 'text-primary',
@@ -76,7 +67,7 @@ export default function DashboardPage() {
       link: '/dashboard/orders',
     },
     {
-      label: 'Active Drivers',
+      label: "Yo'ldagi haydovchilar",
       value: vehicles.filter((v) => v.status === 'on_route').length,
       icon: Truck,
       color: 'text-blue-500',
@@ -84,15 +75,15 @@ export default function DashboardPage() {
       link: '/dashboard/fleet',
     },
     {
-      label: 'Available Vehicles',
+      label: "Bo'sh transportlar",
       value: vehicles.filter((v) => v.status === 'available').length,
       icon: CircleDot,
-      color: 'text-green-500',
-      bg: 'bg-green-500/10',
+      color: 'text-emerald-500',
+      bg: 'bg-emerald-500/10',
       link: '/dashboard/fleet',
     },
     {
-      label: 'Cost Savings',
+      label: 'Xarajat tejamkorligi',
       value: '18%',
       icon: TrendingDown,
       color: 'text-chart-2',
@@ -101,17 +92,17 @@ export default function DashboardPage() {
     },
   ];
 
-  // Create sample waypoints from recent orders for the map
+  // Xarita uchun oxirgi buyurtmalardan nuqtalar yaratish
   const mapWaypoints: Waypoint[] = orders.slice(0, 3).flatMap((order) => [
     { lat: order.origin_lat, lng: order.origin_lng, address: order.origin_address, type: 'origin' as const, name: order.origin_address },
     { lat: order.destination_lat, lng: order.destination_lng, address: order.destination_address, type: 'destination' as const, name: order.destination_address },
   ]);
 
-  // If no orders, show sample waypoints connecting major cities
+  // Buyurtma bo'lmasa — yirik shaharlar orasidagi namoyish nuqtalari
   const displayWaypoints = mapWaypoints.length > 0 ? mapWaypoints : [
-    { lat: 41.2995, lng: 69.2401, address: 'Tashkent', type: 'origin' as const, name: 'Tashkent' },
-    { lat: 39.6542, lng: 66.9597, address: 'Samarkand', type: 'destination' as const, name: 'Samarkand' },
-    { lat: 39.7747, lng: 64.4286, address: 'Bukhara', type: 'destination' as const, name: 'Bukhara' },
+    { lat: 41.2995, lng: 69.2401, address: 'Toshkent', type: 'origin' as const, name: 'Toshkent' },
+    { lat: 39.6542, lng: 66.9597, address: 'Samarqand', type: 'destination' as const, name: 'Samarqand' },
+    { lat: 39.7747, lng: 64.4286, address: 'Buxoro', type: 'destination' as const, name: 'Buxoro' },
   ];
 
   const fleetStats = {
@@ -124,29 +115,29 @@ export default function DashboardPage() {
   const totalVehicles = vehicles.length || 1;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Header */}
+    <div className="space-y-6 animate-fade-in" data-testid="dashboard-page">
+      {/* Sarlavha */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            Welcome back, {profile?.name?.split(' ')[0] || 'User'}
+            Xush kelibsiz, {profile?.name?.split(' ')[0] || 'foydalanuvchi'}
           </h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Here's what's happening with your logistics operations today.
+            Bugungi logistika operatsiyalaringiz bilan tanishing.
           </p>
         </div>
         <Link href="/dashboard/routes">
-          <Button>
-            Optimize New Route
+          <Button data-testid="dashboard-optimize-route-btn">
+            Yangi marshrut optimallashtirish
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </Link>
       </div>
 
-      {/* Stats Grid */}
+      {/* Statistika kartalari */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, idx) => (
-          <Card key={idx} className="p-4 hover:shadow-md transition-shadow">
+          <Card key={idx} className="p-4 hover:shadow-md transition-shadow" data-testid={`dashboard-stat-${idx}`}>
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium">{stat.label}</p>
@@ -161,28 +152,28 @@ export default function DashboardPage() {
               </div>
             </div>
             <Link href={stat.link} className="text-xs text-muted-foreground hover:text-foreground mt-3 flex items-center gap-1 transition-colors">
-              View details
+              Batafsil
               <ArrowUpRight className="w-3 h-3" />
             </Link>
           </Card>
         ))}
       </div>
 
-      {/* Map + Fleet Status */}
+      {/* Xarita + Avtopark holati */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Map */}
+        {/* Xarita */}
         <Card className="lg:col-span-2 p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="font-semibold flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-primary" />
-                Active Routes Map
+                Faol marshrutlar xaritasi
               </h2>
-              <p className="text-xs text-muted-foreground mt-0.5">Real-time overview of routes across Uzbekistan</p>
+              <p className="text-xs text-muted-foreground mt-0.5">O'zbekiston bo'ylab marshrutlarning real vaqtdagi ko'rinishi</p>
             </div>
             <Badge variant="secondary" className="text-xs">
               <Activity className="w-3 h-3 mr-1" />
-              {displayWaypoints.length / 2} active
+              {Math.max(1, displayWaypoints.length / 2)} faol
             </Badge>
           </div>
           <div className="aspect-[8/5] w-full">
@@ -190,19 +181,19 @@ export default function DashboardPage() {
           </div>
         </Card>
 
-        {/* Fleet Status */}
+        {/* Avtopark holati */}
         <Card className="p-5">
           <h2 className="font-semibold flex items-center gap-2 mb-4">
             <Truck className="w-4 h-4 text-primary" />
-            Fleet Status
+            Avtopark holati
           </h2>
 
           <div className="space-y-4">
             {[
-              { label: 'Available', count: fleetStats.available, color: 'bg-green-500', text: 'text-green-600' },
-              { label: 'On Route', count: fleetStats.onRoute, color: 'bg-blue-500', text: 'text-blue-600' },
-              { label: 'Maintenance', count: fleetStats.maintenance, color: 'bg-amber-500', text: 'text-amber-600' },
-              { label: 'Offline', count: fleetStats.offline, color: 'bg-red-500', text: 'text-red-600' },
+              { label: "Bo'sh", count: fleetStats.available, color: 'bg-emerald-500', text: 'text-emerald-600' },
+              { label: "Yo'lda", count: fleetStats.onRoute, color: 'bg-blue-500', text: 'text-blue-600' },
+              { label: "Ta'mirda", count: fleetStats.maintenance, color: 'bg-amber-500', text: 'text-amber-600' },
+              { label: 'Rezervda', count: fleetStats.offline, color: 'bg-slate-400', text: 'text-slate-600' },
             ].map((item) => (
               <div key={item.label}>
                 <div className="flex items-center justify-between mb-1.5">
@@ -219,23 +210,23 @@ export default function DashboardPage() {
 
           <Link href="/dashboard/fleet" className="block mt-5">
             <Button variant="outline" size="sm" className="w-full">
-              Manage Fleet
+              Avtoparkni boshqarish
               <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
             </Button>
           </Link>
         </Card>
       </div>
 
-      {/* Recent Orders */}
+      {/* Oxirgi buyurtmalar */}
       <Card className="p-5">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold flex items-center gap-2">
             <Package className="w-4 h-4 text-primary" />
-            Recent Orders
+            Oxirgi buyurtmalar
           </h2>
           <Link href="/dashboard/orders">
             <Button variant="ghost" size="sm">
-              View All
+              Hammasini ko'rish
               <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
             </Button>
           </Link>
@@ -248,10 +239,10 @@ export default function DashboardPage() {
         ) : orders.length === 0 ? (
           <div className="text-center py-12">
             <Package className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">No orders yet</p>
+            <p className="text-sm text-muted-foreground">Hozircha buyurtmalar yo'q</p>
             <Link href="/dashboard/orders">
-              <Button variant="outline" size="sm" className="mt-3">
-                Create your first order
+              <Button variant="outline" size="sm" className="mt-3" data-testid="dashboard-first-order-btn">
+                Birinchi buyurtmani yarating
               </Button>
             </Link>
           </div>
@@ -260,16 +251,16 @@ export default function DashboardPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-xs text-muted-foreground">
-                  <th className="text-left font-medium py-2.5 pr-4">Order #</th>
-                  <th className="text-left font-medium py-2.5 pr-4 hidden md:table-cell">Route</th>
-                  <th className="text-left font-medium py-2.5 pr-4 hidden sm:table-cell">Cargo</th>
-                  <th className="text-left font-medium py-2.5 pr-4">Status</th>
-                  <th className="text-right font-medium py-2.5">Cost</th>
+                  <th className="text-left font-medium py-2.5 pr-4">Buyurtma</th>
+                  <th className="text-left font-medium py-2.5 pr-4 hidden md:table-cell">Yo'nalish</th>
+                  <th className="text-left font-medium py-2.5 pr-4 hidden sm:table-cell">Yuk</th>
+                  <th className="text-left font-medium py-2.5 pr-4">Holat</th>
+                  <th className="text-right font-medium py-2.5">Summa</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.slice(0, 8).map((order) => {
-                  const status = statusConfig[order.status];
+                  const status = orderStatusConfig[order.status];
                   return (
                     <tr key={order.id} className="border-b border-border/50 hover:bg-secondary/30 transition-colors">
                       <td className="py-3 pr-4 font-medium">{order.order_number}</td>
@@ -285,7 +276,7 @@ export default function DashboardPage() {
                         </Badge>
                       </td>
                       <td className="py-3 text-right font-medium">
-                        {order.estimated_cost.toLocaleString()} UZS
+                        {order.estimated_cost.toLocaleString('uz-UZ')} so'm
                       </td>
                     </tr>
                   );

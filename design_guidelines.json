@@ -1,0 +1,477 @@
+{
+  "project_name": "Karvonboshi",
+  "archetype": "THE PERFORMANCE PRO / LOGISTICS COMMAND CENTER",
+  "locale": "uz-UZ",
+  "currency": "UZS (so'm)",
+  "language": "Uzbek (Lotin yozuvi / Latin script)",
+  "template": "nextjs-ts",
+  "theme": "Light theme default with Dark mode support (blue primary + cyan accent)",
+  "typography": {
+    "font_family_sans": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    "font_family_mono": "JetBrains Mono, 'Geist Mono', monospace",
+    "scale_px": {
+      "display": 56,
+      "h1": 40,
+      "h2": 30,
+      "h3": 24,
+      "h4": 20,
+      "body": 16,
+      "caption": 14
+    },
+    "uzbek_typography_rules": {
+      "apostrophe_convention": "Use standard single quote or modifier letter apostrophe for oʻ and gʻ (O'zbekiston, yo'l, g'ildirak, og'irlik). Standardize on ' or ʻ consistently across all labels.",
+      "casing_rules": "Buttons and section badges use Title Case in Uzbek (e.g., 'Yangi buyurtma yaratish', 'Haydovchi arizasi', 'Barcha buyurtmalar').",
+      "currency_formatting": "Number with space grouping followed by so'm: e.g., '1 250 000 soʻm' or '3 400 000 UZS'.",
+      "metric_units": "kg (kilogramm), t (tonna), km (kilometr), soat (hours), m³ (kub metr)."
+    }
+  },
+  "colors": {
+    "surfaces": [
+      {
+        "name": "page",
+        "kind": "solid",
+        "bg": "#F8FAFC",
+        "on_bg": "#0F172A",
+        "on_bg_muted": "#64748B",
+        "roles": {
+          "link": "#2563EB",
+          "error": "#DC2626",
+          "success": "#16A34A",
+          "warning": "#D97706"
+        }
+      },
+      {
+        "name": "panel",
+        "kind": "solid",
+        "bg": "#FFFFFF",
+        "on_bg": "#0F172A",
+        "on_bg_muted": "#64748B",
+        "roles": {
+          "border": "#E2E8F0",
+          "border_active": "#3B82F6"
+        }
+      },
+      {
+        "name": "sidebar",
+        "kind": "solid",
+        "bg": "#0F172A",
+        "on_bg": "#F8FAFC",
+        "on_bg_muted": "#94A3B8",
+        "roles": {
+          "active_bg": "#1E293B",
+          "active_text": "#38BDF8",
+          "border": "#1E293B"
+        }
+      },
+      {
+        "name": "hero",
+        "kind": "image",
+        "contrast_against": "#0B1329",
+        "guarantee": "scrim: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(30,58,138,0.85) 60%, rgba(2,132,199,0.78) 100%)",
+        "on_bg": "#FFFFFF",
+        "on_bg_muted": "#CBD5E1",
+        "roles": {
+          "link": "#38BDF8",
+          "error": "#F87171",
+          "success": "#4ADE80"
+        }
+      },
+      {
+        "name": "status_pending_badge",
+        "kind": "solid",
+        "bg": "#FEF3C7",
+        "on_bg": "#92400E",
+        "on_bg_muted": "#B45309"
+      },
+      {
+        "name": "status_assigned_badge",
+        "kind": "solid",
+        "bg": "#DBEAFE",
+        "on_bg": "#1E40AF",
+        "on_bg_muted": "#1D4ED8"
+      },
+      {
+        "name": "status_in_transit_badge",
+        "kind": "solid",
+        "bg": "#E0E7FF",
+        "on_bg": "#3730A3",
+        "on_bg_muted": "#4338CA"
+      },
+      {
+        "name": "status_delivered_badge",
+        "kind": "solid",
+        "bg": "#DCFCE7",
+        "on_bg": "#166534",
+        "on_bg_muted": "#15803D"
+      },
+      {
+        "name": "status_cancelled_badge",
+        "kind": "solid",
+        "bg": "#FEE2E2",
+        "on_bg": "#991B1B",
+        "on_bg_muted": "#B91C1C"
+      },
+      {
+        "name": "driver_approved_badge",
+        "kind": "solid",
+        "bg": "#DCFCE7",
+        "on_bg": "#166534",
+        "on_bg_muted": "#15803D"
+      },
+      {
+        "name": "driver_pending_badge",
+        "kind": "solid",
+        "bg": "#FEF3C7",
+        "on_bg": "#92400E",
+        "on_bg_muted": "#B45309"
+      },
+      {
+        "name": "driver_rejected_badge",
+        "kind": "solid",
+        "bg": "#FEE2E2",
+        "on_bg": "#991B1B",
+        "on_bg_muted": "#B91C1C"
+      }
+    ],
+    "accent": "#0284C7",
+    "on_accent": "#FFFFFF",
+    "brand_gradient": "bg-gradient-to-r from-blue-600 via-sky-600 to-cyan-500",
+    "status_tokens": {
+      "pending": {
+        "label_uz": "Kutilmoqda",
+        "bg_class": "bg-amber-100 dark:bg-amber-950/60",
+        "text_class": "text-amber-800 dark:text-amber-300",
+        "border_class": "border-amber-200 dark:border-amber-800",
+        "dot_class": "bg-amber-500"
+      },
+      "assigned": {
+        "label_uz": "Biriktirildi",
+        "bg_class": "bg-blue-100 dark:bg-blue-950/60",
+        "text_class": "text-blue-800 dark:text-blue-300",
+        "border_class": "border-blue-200 dark:border-blue-800",
+        "dot_class": "bg-blue-500"
+      },
+      "in_transit": {
+        "label_uz": "Yoʻlda",
+        "bg_class": "bg-indigo-100 dark:bg-indigo-950/60",
+        "text_class": "text-indigo-800 dark:text-indigo-300",
+        "border_class": "border-indigo-200 dark:border-indigo-800",
+        "dot_class": "bg-indigo-500"
+      },
+      "delivered": {
+        "label_uz": "Yetkazildi",
+        "bg_class": "bg-emerald-100 dark:bg-emerald-950/60",
+        "text_class": "text-emerald-800 dark:text-emerald-300",
+        "border_class": "border-emerald-200 dark:border-emerald-800",
+        "dot_class": "bg-emerald-500"
+      },
+      "cancelled": {
+        "label_uz": "Bekor qilindi",
+        "bg_class": "bg-rose-100 dark:bg-rose-950/60",
+        "text_class": "text-rose-800 dark:text-rose-300",
+        "border_class": "border-rose-200 dark:border-rose-800",
+        "dot_class": "bg-rose-500"
+      }
+    }
+  },
+  "entry_surfaces": {
+    "/": "split hero — brand tagline + CTA left with interactive route preview, live logistics stats cards and Uzbekistan route map right",
+    "/login": "branded split login — logistics command positioning panel left, phone/email login form right",
+    "/signup": "branded split signup — fleet carrier benefits panel left, registration form right",
+    "/driver-apply": "mobile-optimized public multi-step application form with live progress indicator, document upload zones and immediate SMS/Telegram confirmation preview"
+  },
+  "screens_blueprint": {
+    "1_orders_page": {
+      "path": "/app/app/dashboard/orders/page.tsx",
+      "route": "/dashboard/orders",
+      "title_uz": "Buyurtmalar boshqaruvi",
+      "subtitle_uz": "O'zbekiston bo'ylab barcha yuk tashish buyurtmalari va ularning holati",
+      "layout_mode": "Header with search & filter pills + Stat cards row (4 items) + Tabbed view (All, Pending, In Transit, Delivered) + Responsive table with mobile card flip + 'Yangi buyurtma' (Create Order) Dialog",
+      "stat_cards": [
+        { "id": "total_orders", "label_uz": "Jami buyurtmalar", "value": "142", "change": "+12%", "icon": "Package" },
+        { "id": "in_transit_orders", "label_uz": "Hozir yoʻlda", "value": "28", "change": "+4", "icon": "Truck" },
+        { "id": "pending_orders", "label_uz": "Kutilayotganlar", "value": "15", "change": "Yangi", "icon": "Clock" },
+        { "id": "delivered_today", "label_uz": "Bugun yetkazilgan", "value": "19", "change": "98% oʻz vaqtida", "icon": "CheckCircle2" }
+      ],
+      "create_order_dialog": {
+        "trigger_button": "Yangi buyurtma yaratish",
+        "trigger_testid": "create-order-open-dialog-btn",
+        "dialog_testid": "create-order-dialog",
+        "fields": [
+          { "name": "origin_city", "label_uz": "Joʻnash shahri (Qayerdan)", "type": "select", "options_source": "uzbekistanCities (Toshkent, Samarqand, Buxoro, Andijon, Farg'ona, Namangan, Qarshi, Nukus, Xiva, Termiz, Navoiy, Jizzax, Guliston)", "testid": "order-origin-select" },
+          { "name": "destination_city", "label_uz": "Yetkazish manzili (Qayerga)", "type": "select", "options_source": "uzbekistanCities", "testid": "order-destination-select" },
+          { "name": "cargo_type", "label_uz": "Yuk turi", "type": "select", "options": ["Xalq isteʼmol mollari", "Oziq-ovqat (Sovutgichli)", "Qurilish mollari", "Ogʻir texnika", "Tez buziluvchan", "Suyuqlik/Siksterna", "Xavfli yuklar (ADR)"], "testid": "order-cargo-type-select" },
+          { "name": "cargo_weight", "label_uz": "Yuk ogʻirligi (kg / tonna)", "type": "number", "placeholder": "Masalan: 12500 kg", "testid": "order-weight-input" },
+          { "name": "pickup_date", "label_uz": "Yuklash sanasi va vaqti", "type": "date-picker", "testid": "order-pickup-date-picker" },
+          { "name": "price_estimate", "label_uz": "Tavsiya etilgan toʻlov (UZS)", "type": "currency_input", "placeholder": "2 800 000 soʻm", "testid": "order-price-input" },
+          { "name": "driver_id", "label_uz": "Haydovchini biriktirish (ixtiyoriy)", "type": "select", "testid": "order-driver-select" },
+          { "name": "notes", "label_uz": "Qoʻshimcha eslatma va talablar", "type": "textarea", "placeholder": "Yuklash joyi xususiyatlari, kontakt raqam...", "testid": "order-notes-textarea" }
+        ],
+        "submit_button": "Buyurtmani tasdiqlash",
+        "submit_testid": "create-order-submit-btn"
+      },
+      "table_columns": [
+        "ID / Buyurtma raqami (#KB-1024)",
+        "Yoʻnalish (Joʻnash → Qabul)",
+        "Yuk tafsiloti (Turi, Ogʻirlik)",
+        "Haydovchi / Transport",
+        "Sana / Muddat",
+        "Summa",
+        "Holat (Status badge)",
+        "Amallar (Koʻrish, Tahrirlash, Bekor qilish)"
+      ]
+    },
+    "2_fleet_page": {
+      "path": "/app/app/dashboard/fleet/page.tsx",
+      "route": "/dashboard/fleet",
+      "title_uz": "Avtopark (Transport vositalari)",
+      "subtitle_uz": "Kompaniya va hamkor transport vositalarining texnik holati va marshrutlari",
+      "layout_mode": "Header with 'Transport qoʻshish' CTA + Summary metric row (Jami mashinalar, Faol, Taʼmirda, Boʻsh) + Vehicle Grid (Mode A Tetris Bento cards with telemetry metrics) + 'Yangi transport' Dialog",
+      "vehicle_card_attributes": [
+        { "field": "plate_number", "label_uz": "Davlat raqami (01 | A 777 AA)", "badge_style": "Uzbek license plate format (black bold text on white with blue country flag strip)" },
+        { "field": "model", "label_uz": "Model", "examples": ["MAN TGX 18.440", "Mercedes-Benz Actros 1845", "Volvo FH16 750", "Isuzu NPR 75", "Kamaz 54901", "Howo A7"] },
+        { "field": "type", "label_uz": "Kuzov turi", "examples": ["Tentli (TIR)", "Refrijerator (-20°C)", "Bortli", "Siksterna", "Konteynerovoz"] },
+        { "field": "capacity", "label_uz": "Sigʻim & Yuk koʻtarish", "format": "22 t / 86 m³" },
+        { "field": "current_status", "label_uz": "Holat", "states": ["Yoʻlda (Band)", "Boʻsh (Tayyor)", "Texnik xizmatda", "Rezervda"] },
+        { "field": "assigned_driver", "label_uz": "Biriktirilgan haydovchi", "format": "Ism Familiya + Telefon" },
+        { "field": "fuel_and_mileage", "label_uz": "Yoqilgʻi & Yurgan masofa", "format": "Yoqilgʻi: 78% | Masofa: 142,500 km" }
+      ],
+      "add_vehicle_dialog": {
+        "trigger_button": "Yangi transport qoʻshish",
+        "trigger_testid": "add-vehicle-open-dialog-btn",
+        "dialog_testid": "add-vehicle-dialog",
+        "fields": [
+          { "name": "plate_number", "label_uz": "Davlat raqami", "placeholder": "01 A 777 AA", "testid": "vehicle-plate-input" },
+          { "name": "model_brand", "label_uz": "Markasi va modeli", "placeholder": "MAN TGX 18.440", "testid": "vehicle-model-input" },
+          { "name": "vehicle_type", "label_uz": "Kuzov turi", "type": "select", "options": ["Tentli (TIR)", "Refrijerator", "Bortli", "Siksterna", "Konteyner tashuvchi", "Furgon"], "testid": "vehicle-type-select" },
+          { "name": "max_weight_capacity", "label_uz": "Maksimal yuk koʻtarish (tonna)", "type": "number", "testid": "vehicle-capacity-input" },
+          { "name": "fuel_type", "label_uz": "Yoqilgʻi turi", "type": "select", "options": ["Dizel (Euro 5/6)", "Metan (CNG)", "Propan (LPG)", "Elektr"], "testid": "vehicle-fuel-select" },
+          { "name": "manufacture_year", "label_uz": "Ishlab chiqarilgan yili", "type": "number", "placeholder": "2022", "testid": "vehicle-year-input" }
+        ],
+        "submit_button": "Transportni saqlash",
+        "submit_testid": "save-vehicle-submit-btn"
+      }
+    },
+    "3_analytics_page": {
+      "path": "/app/app/dashboard/analytics/page.tsx",
+      "route": "/dashboard/analytics",
+      "title_uz": "Logistika Tahlili va Hisobotlar",
+      "subtitle_uz": "Xarajatlar, yetkazish tezligi, 7-faktor samaradorligi va buyurtmalar dinamikasi",
+      "layout_mode": "Time period picker (Bugun, Bu hafta, Shu oy, 2026-yil) + KPI Cards with trend indicators + Recharts Grid (2x2 + Wide Data Table)",
+      "charts": [
+        {
+          "id": "chart_orders_by_status",
+          "title_uz": "Buyurtmalar holat taqsimoti",
+          "type": "PieChart / Donut (Recharts ResponsiveContainer)",
+          "testid": "chart-orders-status-donut",
+          "data_keys": ["Yetkazilgan (Delivered: 65%)", "Yoʻlda (In Transit: 20%)", "Kutilmoqda (Pending: 10%)", "Bekor qilingan (Cancelled: 5%)"],
+          "colors": ["#16A34A", "#3B82F6", "#F59E0B", "#EF4444"]
+        },
+        {
+          "id": "chart_monthly_cost_revenue",
+          "title_uz": "Oylik yuk tashish aylanmasi va tannarxi (UZS)",
+          "type": "AreaChart with gradient fills (Recharts)",
+          "testid": "chart-monthly-cost-area",
+          "metrics": ["Tushum (Aylanma)", "Sof logistika xarajati (Yoqilgʻi + Yoʻl toʻlovlari + Maosh)"],
+          "sample_data": [
+            { "month": "Yan", "income": 420000000, "cost": 290000000 },
+            { "month": "Fev", "income": 510000000, "cost": 340000000 },
+            { "month": "Mar", "income": 590000000, "cost": 380000000 },
+            { "month": "Apr", "income": 680000000, "cost": 430000000 },
+            { "month": "May", "income": 740000000, "cost": 470000000 },
+            { "month": "Iyun", "income": 820000000, "cost": 510000000 }
+          ]
+        },
+        {
+          "id": "chart_seven_factors_radar",
+          "title_uz": "7-Faktor marshrut sifati koʻrsatkichlari",
+          "type": "RadarChart (Recharts)",
+          "testid": "chart-seven-factors-radar",
+          "factors": [
+            { "name": "Xavfsizlik (Safety)", "score": 92 },
+            { "name": "Yoʻl sifati (Road Quality)", "score": 78 },
+            { "name": "Tezlik (Speed)", "score": 85 },
+            { "name": "Tejamkorlik (Cost)", "score": 88 },
+            { "name": "Qulaylik (Comfort)", "score": 80 },
+            { "name": "Ishonchlilik (Reliability)", "score": 95 },
+            { "name": "Ovqat va dam (Rest)", "score": 84 }
+          ]
+        },
+        {
+          "id": "chart_fleet_utilization_bar",
+          "title_uz": "Hududlar boʻyicha yuk tashish hajmi (Tonna)",
+          "type": "BarChart (Recharts)",
+          "testid": "chart-region-volume-bar",
+          "regions": ["Toshkent", "Fargʻona vodiysi", "Samarqand", "Buxoro", "Qashqadaryo", "Xorazm & Qoraqalpogʻiston"]
+        }
+      ]
+    },
+    "4_drivers_page_fix": {
+      "path": "/app/app/dashboard/drivers/page.tsx",
+      "route": "/dashboard/drivers",
+      "title_uz": "Haydovchilar tarkibi",
+      "subtitle_uz": "Tasdiqlangan haydovchilar roʻyxati, arizalar moderatsiyasi va reytinglar",
+      "layout_mode": "Tabs for (Tasdiqlangan haydovchilar, Yangi arizalar / Moderatsiya) + Search by name/phone/license + Driver card grid with direct call & status update actions",
+      "driver_card_features": [
+        "Avatar + Ism Familiya",
+        "Telefon raqami (+998 90 123 45 67) + 'Qoʻngʻiroq qilish' tugmasi",
+        "Haydovchilik guvohnomasi toifasi (BC, CE, DE) va tajriba (yillar)",
+        "Biriktirilgan mashina davlat raqami",
+        "Reyting (Yulduzcha reytingi: 4.9 ★, 128 ta yakunlangan reys)",
+        "Tasdiq holati (Faol / Tekshirilmoqda / Bloklangan)"
+      ],
+      "moderation_actions": {
+        "approve_testid": "driver-approve-btn",
+        "reject_testid": "driver-reject-btn",
+        "view_docs_testid": "driver-view-documents-btn"
+      }
+    },
+    "5_settings_page": {
+      "path": "/app/app/dashboard/settings/page.tsx",
+      "route": "/dashboard/settings",
+      "title_uz": "Tizim sozlamalari",
+      "subtitle_uz": "Shaxsiy profil, xavfsizlik, bildirishnomalar va kompaniya rekvizitlari",
+      "layout_mode": "Vertical or Horizontal Tab Navigation with 4 sections (Profil maʼlumotlari, Parolni oʻzgartirish, Bildirishnomalar, Kompaniya rekvizitlari)",
+      "sections": [
+        {
+          "id": "profile",
+          "title_uz": "Shaxsiy profil",
+          "fields": [
+            { "name": "full_name", "label_uz": "Toʻliq ism (F.I.Sh)", "testid": "settings-fullname-input" },
+            { "name": "phone", "label_uz": "Telefon raqami", "placeholder": "+998 90 123-45-67", "testid": "settings-phone-input" },
+            { "name": "email", "label_uz": "Elektron pochta", "testid": "settings-email-input" },
+            { "name": "role", "label_uz": "Tizimdagi rol", "value": "Logistika dispetcheri / Administrator", "disabled": true }
+          ],
+          "save_btn_testid": "settings-save-profile-btn"
+        },
+        {
+          "id": "security",
+          "title_uz": "Parol va xavfsizlik",
+          "fields": [
+            { "name": "current_password", "label_uz": "Hozirgi parol", "type": "password", "testid": "settings-current-password-input" },
+            { "name": "new_password", "label_uz": "Yangi parol", "type": "password", "testid": "settings-new-password-input" },
+            { "name": "confirm_password", "label_uz": "Yangi parolni tasdiqlang", "type": "password", "testid": "settings-confirm-password-input" }
+          ],
+          "update_pwd_btn_testid": "settings-update-password-btn"
+        },
+        {
+          "id": "notifications",
+          "title_uz": "Bildirishnomalar",
+          "toggles": [
+            { "name": "sms_notifications", "label_uz": "SMS orqali buyurtma holati haqida xabarlar", "default": true },
+            { "name": "telegram_bot", "label_uz": "Karvonboshi Telegram botiga xabarlarni yoʻnaltirish", "default": true },
+            { "name": "email_reports", "label_uz": "Haftalik hisobotlarni elektron pochtaga joʻnatish", "default": false }
+          ]
+        }
+      ]
+    },
+    "6_driver_apply_public_page": {
+      "path": "/app/app/driver-apply/page.tsx",
+      "route": "/driver-apply",
+      "title_uz": "Karvonboshi jamoasiga haydovchi sifatida qoʻshiling",
+      "subtitle_uz": "Oʻzbekiston boʻylab eng qulay va daromadli reyslar. Ariza topshirish 3 daqiqa vaqt oladi.",
+      "layout_mode": "Public landing with mobile-first stepper form + trust badge strip (Kafolatlangan toʻlovlar, 24/7 dispetcher yordami, 7-faktorli yoʻnalishlar)",
+      "form_steps": [
+        {
+          "step_number": 1,
+          "step_title_uz": "Shaxsiy maʼlumotlar",
+          "fields": [
+            { "name": "full_name", "label_uz": "Ism va Familiyangiz", "placeholder": "Rustam Karimov", "testid": "driver-apply-name-input" },
+            { "name": "phone_number", "label_uz": "Telefon raqamingiz (Bogʻlanish uchun)", "placeholder": "+998 90 123 45 67", "type": "tel", "testid": "driver-apply-phone-input" },
+            { "name": "city_region", "label_uz": "Yashash hududingiz (Viloyat / Shahar)", "type": "select", "options_source": "uzbekistanCities", "testid": "driver-apply-city-select" },
+            { "name": "experience_years", "label_uz": "Haydovchilik tajribasi (yil)", "type": "number", "placeholder": "5", "testid": "driver-apply-experience-input" }
+          ]
+        },
+        {
+          "step_number": 2,
+          "step_title_uz": "Transport vositasi maʼlumotlari",
+          "fields": [
+            { "name": "has_own_truck", "label_uz": "Shaxsiy yuk mashinangiz bormi?", "type": "radio", "options": ["Ha, shaxsiy mashinam bor", "Yoʻq, kompaniya mashinasida ishlamoqchiman"], "testid": "driver-apply-has-truck-radio" },
+            { "name": "truck_model", "label_uz": "Yuk mashinasi rusumi", "placeholder": "Masalan: Isuzu yoki MAN", "testid": "driver-apply-truck-model-input" },
+            { "name": "truck_plate", "label_uz": "Davlat raqami", "placeholder": "01 A 123 AA", "testid": "driver-apply-truck-plate-input" },
+            { "name": "truck_type", "label_uz": "Kuzov turi", "type": "select", "options": ["Tentli (TIR)", "Refrijerator", "Bortli", "Siksterna", "Konteyner tashuvchi"], "testid": "driver-apply-truck-type-select" },
+            { "name": "carrying_capacity", "label_uz": "Yuk koʻtarish hajmi (tonna)", "type": "number", "placeholder": "20", "testid": "driver-apply-capacity-input" }
+          ]
+        },
+        {
+          "step_number": 3,
+          "step_title_uz": "Hujjatlar va Guvohnoma",
+          "fields": [
+            { "name": "license_categories", "label_uz": "Haydovchilik guvohnomasi toifalari", "type": "checkbox_group", "options": ["B", "C", "BC", "CE", "DE"], "testid": "driver-apply-license-categories" },
+            { "name": "driver_license_file", "label_uz": "Guvohnoma nusxasi (Foto yoki PDF)", "type": "file_upload", "testid": "driver-apply-license-upload" },
+            { "name": "tech_passport_file", "label_uz": "Texnik pasport nusxasi", "type": "file_upload", "testid": "driver-apply-passport-upload" },
+            { "name": "agreement_checkbox", "label_uz": "Qoidalar va shaxsiy maʼlumotlarni qayta ishlashga roziman", "type": "checkbox", "testid": "driver-apply-terms-checkbox" }
+          ]
+        }
+      ],
+      "submit_cta": {
+        "label_uz": "Arizani yuborish",
+        "testid": "driver-apply-submit-btn",
+        "success_screen": {
+          "title_uz": "Arizangiz qabul qilindi!",
+          "message_uz": "Tez orada dispetcherimiz siz bilan koʻrsatilgan telefon raqami orqali bogʻlanadi. Karvonboshi oilasiga xush kelibsiz!",
+          "back_home_btn": "Bosh sahifaga qaytish"
+        }
+      }
+    }
+  },
+  "ai_chatbot_specs": {
+    "widget_position": "Bottom right floating trigger in dashboard (z-50) with collapsible panel (420px width on desktop, full-width bottom sheet on mobile)",
+    "title_uz": "Karvonboshi AI Maslahatchisi",
+    "subtitle_uz": "7-faktorli yoʻnalish tahlili, yoqilgʻi hisobi va yuk logistikasi boʻyicha tezkor yordam",
+    "api_route": "/api/chat",
+    "suggested_prompts_uz": [
+      "Toshkentdan Samarqandga eng xavfsiz va tejamkor yoʻnalish qaysi?",
+      "Qamchiq dovoni boʻyicha ob-havo va yoʻl holatini bilish",
+      "20 tonna oziq-ovqat yuki uchun tavsiya etilgan refrijerator narxi qancha?",
+      "7-faktor boʻyicha dam olish maskanlari qayerda joylashgan?"
+    ],
+    "model_context": "Real LLM API route connected to system prompt specialized in Uzbekistan road infrastructure (M39, A373 Qamchiq pass, M37, M40, A380), transport regulations, and Karvonboshi 7-factor methodology."
+  },
+  "media_assets": {
+    "image_urls": [
+      {
+        "url": "https://images.unsplash.com/photo-1766785368863-f2188a8c8b32?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxsb2dpc3RpY3MlMjB0cnVjayUyMGhpZ2h3YXl8ZW58MHx8fHwxNzg5ODAwMzE5fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Two semi-trucks driving on a highway - ideal for /driver-apply hero and fleet banner",
+        "category": "hero_and_driver_apply"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1766561994067-dbd575e1cff2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwyfHxsb2dpc3RpY3MlMjB0cnVjayUyMGhpZ2h3YXl8ZW58MHx8fHwxNzg5ODAwMzE5fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Modern logistics blue cargo truck on highway - perfect for fleet management preview",
+        "category": "fleet_showcase"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1655478157959-3fcfc543c1a2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwzfHxsb2dpc3RpY3MlMjB0cnVjayUyMGhpZ2h3YXl8ZW58MHx8fHwxNzg5ODAwMzE5fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Highway sunset route - suitable for dashboard route optimization background card",
+        "category": "route_visuals"
+      }
+    ]
+  },
+  "motion": {
+    "library": "motion/react (bundled)",
+    "page_transitions": "Subtle opacity and slight Y-axis slide (y: 6, opacity: 0 -> y: 0, opacity: 1) with 0.2s duration",
+    "card_hover": "transition: transform 0.2s ease, box-shadow 0.2s ease; hover:-translate-y-0.5 hover:shadow-md",
+    "dialog_animation": "scale: 0.96 to 1 with spring damping: 25, stiffness: 300",
+    "table_row_interaction": "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition: background-color 0.15s ease"
+  },
+  "accessibility": {
+    "wcag_level": "WCAG AA (4.5:1 text contrast on all solid and glass surfaces)",
+    "data_testid_convention": "All actionable buttons, dialog inputs, table rows, and status pills must have explicit data-testid attributes formatted in kebab-case (e.g., data-testid=\"create-order-open-dialog-btn\")",
+    "focus_states": "focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:outline-none dark:focus:ring-offset-slate-900",
+    "keyboard_navigation": "Full tab order across dialog forms, dropdowns, and pagination controls",
+    "reduced_motion": "Respect prefers-reduced-motion media queries by degrading animations to instant transitions"
+  },
+  "instructions_to_main_agent": [
+    "Preserve the exact visual identity of Karvonboshi: blue-600 to cyan-500 brand gradient, 256px fixed left sidebar, sticky topbar with search and AI prompt trigger.",
+    "Implement ALL 6 screens/flows with complete TypeScript (.tsx) and strict types: /dashboard/orders (with Create Order Dialog), /dashboard/fleet (with Add Vehicle Dialog), /dashboard/analytics (with Recharts graphs), /dashboard/settings (with profile form and password change), /dashboard/drivers (fix broken state with active vs pending tabs and moderation controls), and public /driver-apply (with multi-step mobile-first form).",
+    "Strictly use the Uzbek language (Lotin yozuvi) for all user-facing labels, table headers, error toasts, and placeholder texts as outlined in this blueprint.",
+    "Ensure every form and interactive component uses shadcn/ui components (Dialog, Select, Input, Textarea, Button, Badge, Tabs, Card, Table) and includes explicit data-testid attributes.",
+    "Wire up real AI Chatbot functionality in /api/chat with streaming or JSON response explaining route optimizations across the 7 factors."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "Never use generic centered layouts or unstyled default HTML select/input elements.",
+    "Ensure high text contrast against cards and header overlays.",
+    "Wrap table components in overflow-x-auto containers and provide card-view fallback on small viewports (<768px).",
+    "Use sonner for instant toast feedback upon submitting forms (Buyurtma muvaffaqiyatli yaratildi, Transport saqlandi, Ariza qabul qilindi)."
+  ]
+}

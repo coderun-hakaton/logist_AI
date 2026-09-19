@@ -7,8 +7,8 @@ import { Toaster } from '@/components/ui/toaster';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Karvonboshi — Intelligent Route Optimization for Uzbekistan',
-  description: 'AI-powered logistics platform optimizing routes across Uzbekistan based on safety, road quality, cost, driver comfort, and more.',
+  title: "Karvonboshi — O'zbekiston uchun aqlli marshrut optimallashtirish",
+  description: "AI asosidagi logistika platformasi: xavfsizlik, yo'l sifati, xarajat, haydovchi qulayligi va boshqa 7 faktor asosida O'zbekiston bo'ylab marshrutlarni optimallashtiradi.",
 };
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="uz">
       <body className={inter.className}>
         <AuthProvider>
           {children}

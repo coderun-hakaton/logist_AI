@@ -2,10 +2,8 @@
 
 import { useState } from 'react';
 import {
-  Route, MapPin, Package, Truck, Calendar, Wallet, Sparkles,
-  Shield, Gauge, Bed, Clock, UtensilsCrossed, TrendingUp,
-  Loader2, ArrowRight, AlertTriangle, Star, CheckCircle2,
-  ChevronRight, Navigation,
+  Route, MapPin, Sparkles, Shield, Gauge, Bed, Clock, UtensilsCrossed, Wallet,
+  TrendingUp, Loader2, ArrowRight, AlertTriangle, Star, Navigation,
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,47 +17,47 @@ import {
 import { UzbekistanMap } from '@/components/uzbekistan-map';
 import { useToast } from '@/hooks/use-toast';
 import { optimizeRoute } from '@/lib/route-optimizer';
-import { uzbekistanCities, calculateDistance } from '@/lib/uzbekistan-data';
+import { uzbekistanCities } from '@/lib/uzbekistan-data';
 import { RouteOptimizationResult, CargoType, VehicleType } from '@/types/database';
 import { cn } from '@/lib/utils';
 
 const factors = [
-  { key: 'safety', label: 'Safety', icon: Shield, color: 'text-red-500' },
-  { key: 'roadQuality', label: 'Road Quality', icon: Route, color: 'text-blue-500' },
-  { key: 'speed', label: 'Speed', icon: Gauge, color: 'text-cyan-500' },
-  { key: 'cost', label: 'Cost', icon: Wallet, color: 'text-green-500' },
-  { key: 'comfort', label: 'Comfort', icon: Bed, color: 'text-amber-500' },
-  { key: 'reliability', label: 'Reliability', icon: Clock, color: 'text-indigo-500' },
-  { key: 'foodRest', label: 'Food & Rest', icon: UtensilsCrossed, color: 'text-orange-500' },
+  { key: 'safety', label: 'Xavfsizlik', icon: Shield, color: 'text-red-500' },
+  { key: 'roadQuality', label: "Yo'l sifati", icon: Route, color: 'text-blue-500' },
+  { key: 'speed', label: 'Tezlik', icon: Gauge, color: 'text-cyan-500' },
+  { key: 'cost', label: 'Xarajat', icon: Wallet, color: 'text-green-500' },
+  { key: 'comfort', label: 'Qulaylik', icon: Bed, color: 'text-amber-500' },
+  { key: 'reliability', label: 'Ishonchlilik', icon: Clock, color: 'text-indigo-500' },
+  { key: 'foodRest', label: 'Ovqat va dam olish', icon: UtensilsCrossed, color: 'text-orange-500' },
 ] as const;
 
 const cargoTypes: { value: CargoType; label: string }[] = [
-  { value: 'general', label: 'General Cargo' },
-  { value: 'perishable', label: 'Perishable Goods' },
-  { value: 'fragile', label: 'Fragile Items' },
-  { value: 'hazardous', label: 'Hazardous Materials' },
+  { value: 'general', label: 'Oddiy yuk' },
+  { value: 'perishable', label: 'Tez buziluvchi yuk' },
+  { value: 'fragile', label: "Mo'rt buyumlar" },
+  { value: 'hazardous', label: 'Xavfli yuklar (ADR)' },
 ];
 
 const vehicleTypes: { value: VehicleType; label: string }[] = [
-  { value: 'truck', label: 'Standard Truck' },
-  { value: 'van', label: 'Delivery Van' },
-  { value: 'refrigerated', label: 'Refrigerated Truck' },
-  { value: 'semi', label: 'Semi-Trailer' },
-  { value: 'container', label: 'Container Truck' },
+  { value: 'truck', label: 'Yuk mashinasi' },
+  { value: 'van', label: 'Furgon' },
+  { value: 'refrigerated', label: 'Refrijerator' },
+  { value: 'semi', label: 'Yarim tirkama' },
+  { value: 'container', label: 'Konteyner tashuvchi' },
 ];
 
 function scoreColor(score: number): string {
-  if (score >= 8) return 'text-green-600 bg-green-100 dark:bg-green-900/30';
+  if (score >= 8) return 'text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30';
   if (score >= 6) return 'text-amber-600 bg-amber-100 dark:bg-amber-900/30';
   if (score >= 4) return 'text-orange-600 bg-orange-100 dark:bg-orange-900/30';
   return 'text-red-600 bg-red-100 dark:bg-red-900/30';
 }
 
 function scoreLabel(score: number): string {
-  if (score >= 8) return 'Excellent';
-  if (score >= 6) return 'Good';
-  if (score >= 4) return 'Fair';
-  return 'Poor';
+  if (score >= 8) return "A'lo";
+  if (score >= 6) return 'Yaxshi';
+  if (score >= 4) return 'O\'rtacha';
+  return 'Yomon';
 }
 
 export default function RouteOptimizerPage() {
@@ -89,7 +87,7 @@ export default function RouteOptimizerPage() {
 
   const handleOptimize = async () => {
     if (!origin || !destination) {
-      toast({ title: 'Missing information', description: 'Please select origin and destination cities.', variant: 'destructive' });
+      toast({ title: "Ma'lumot yetarli emas", description: 'Jo\'nash va yetkazish shaharlarini tanlang.', variant: 'destructive' });
       return;
     }
 
@@ -97,15 +95,15 @@ export default function RouteOptimizerPage() {
     const toCity = findCity(destination);
 
     if (!fromCity || !toCity) {
-      toast({ title: 'City not found', description: 'Please select cities from the dropdown list.', variant: 'destructive' });
+      toast({ title: 'Shahar topilmadi', description: 'Shaharlarni ro\'yxatdan tanlang.', variant: 'destructive' });
       return;
     }
 
     setOptimizing(true);
     setResult(null);
 
-    // Simulate AI processing time
-    await new Promise((r) => setTimeout(r, 1500));
+    // AI tahlil vaqtini simulyatsiya qilish
+    await new Promise((r) => setTimeout(r, 1200));
 
     const optimizationResult = optimizeRoute({
       origin: { lat: fromCity.lat, lng: fromCity.lng, address: fromCity.name },
@@ -128,39 +126,38 @@ export default function RouteOptimizerPage() {
     setResult(optimizationResult);
     setSelectedRouteIdx(0);
     setOptimizing(false);
-    toast({ title: 'Route optimized!', description: `Best route scored ${optimizationResult.route.overall_score}/10 overall.` });
+    toast({ title: 'Marshrut optimallashtirildi!', description: `Eng yaxshi marshrut umumiy balli: ${optimizationResult.route.overall_score}/10.` });
   };
 
   const allRoutes = result ? [result.route, ...result.alternatives] : [];
   const selectedRoute = allRoutes[selectedRouteIdx];
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in" data-testid="routes-page">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Route Optimizer</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Marshrut optimizatori</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          AI-powered route optimization considering 7 real-world factors across Uzbekistan.
+          O'zbekiston bo'ylab 7 real faktorni hisobga oluvchi AI asosidagi marshrut optimallashtirish.
         </p>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Input Form */}
+        {/* Forma */}
         <Card className="p-5 xl:col-span-1 space-y-5">
           <div className="flex items-center gap-2 mb-1">
             <Sparkles className="w-4 h-4 text-primary" />
-            <h2 className="font-semibold">Route Parameters</h2>
+            <h2 className="font-semibold">Marshrut parametrlari</h2>
           </div>
 
-          {/* Origin & Destination */}
           <div className="space-y-3">
             <div className="space-y-1.5">
               <Label className="text-xs flex items-center gap-1.5">
-                <MapPin className="w-3 h-3 text-green-500" />
-                Origin City
+                <MapPin className="w-3 h-3 text-emerald-500" />
+                Jo'nash shahri
               </Label>
               <Select value={origin} onValueChange={setOrigin}>
-                <SelectTrigger><SelectValue placeholder="Select origin city" /></SelectTrigger>
-                <SelectContent>
+                <SelectTrigger data-testid="routes-origin-select"><SelectValue placeholder="Jo'nash shahri" /></SelectTrigger>
+                <SelectContent className="max-h-60">
                   {uzbekistanCities.map((c) => (
                     <SelectItem key={c.name} value={c.name}>{c.name} ({c.nameUz})</SelectItem>
                   ))}
@@ -171,11 +168,11 @@ export default function RouteOptimizerPage() {
             <div className="space-y-1.5">
               <Label className="text-xs flex items-center gap-1.5">
                 <MapPin className="w-3 h-3 text-primary" />
-                Destination City
+                Yetkazish shahri
               </Label>
               <Select value={destination} onValueChange={setDestination}>
-                <SelectTrigger><SelectValue placeholder="Select destination city" /></SelectTrigger>
-                <SelectContent>
+                <SelectTrigger data-testid="routes-destination-select"><SelectValue placeholder="Yetkazish shahri" /></SelectTrigger>
+                <SelectContent className="max-h-60">
                   {uzbekistanCities.map((c) => (
                     <SelectItem key={c.name} value={c.name}>{c.name} ({c.nameUz})</SelectItem>
                   ))}
@@ -184,21 +181,20 @@ export default function RouteOptimizerPage() {
             </div>
           </div>
 
-          {/* Cargo & Vehicle */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label className="text-xs">Cargo Type</Label>
+              <Label className="text-xs">Yuk turi</Label>
               <Select value={cargoType} onValueChange={(v) => setCargoType(v as CargoType)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger data-testid="routes-cargo-select"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {cargoTypes.map((c) => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-xs">Vehicle Type</Label>
+              <Label className="text-xs">Transport turi</Label>
               <Select value={vehicleType} onValueChange={(v) => setVehicleType(v as VehicleType)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger data-testid="routes-vehicle-select"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {vehicleTypes.map((v) => <SelectItem key={v.value} value={v.value}>{v.label}</SelectItem>)}
                 </SelectContent>
@@ -208,29 +204,30 @@ export default function RouteOptimizerPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label className="text-xs">Weight (tons)</Label>
-              <Input type="number" value={cargoWeight} onChange={(e) => setCargoWeight(Number(e.target.value))} min={0.1} step={0.5} />
+              <Label className="text-xs">Og'irlik (tonna)</Label>
+              <Input type="number" value={cargoWeight} onChange={(e) => setCargoWeight(Number(e.target.value))} min={0.1} step={0.5} data-testid="routes-weight-input" />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-xs">Budget (UZS, optional)</Label>
-              <Input type="number" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="No limit" />
+              <Label className="text-xs">Byudjet (so'm, ixtiyoriy)</Label>
+              <Input type="number" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Cheklovsiz" data-testid="routes-budget-input" />
             </div>
           </div>
 
-          {/* Priority Sliders */}
+          {/* Prioritet slayderlari */}
           <div className="space-y-3 pt-2 border-t border-border">
-            <Label className="text-xs font-semibold">Optimization Priorities</Label>
+            <Label className="text-xs font-semibold">Optimallashtirish prioritetlari</Label>
             <div className="space-y-2.5">
               {factors.map((factor) => (
                 <div key={factor.key} className="flex items-center gap-3">
                   <factor.icon className={cn('w-3.5 h-3.5 shrink-0', factor.color)} />
-                  <span className="text-xs w-24 shrink-0">{factor.label}</span>
+                  <span className="text-xs w-28 shrink-0">{factor.label}</span>
                   <Slider
                     value={[priorities[factor.key]]}
                     onValueChange={(v) => setPriorities({ ...priorities, [factor.key]: v[0] })}
                     max={100}
                     step={5}
                     className="flex-1"
+                    data-testid={`routes-priority-${factor.key}`}
                   />
                   <span className="text-xs text-muted-foreground w-8 text-right">{priorities[factor.key]}</span>
                 </div>
@@ -238,22 +235,22 @@ export default function RouteOptimizerPage() {
             </div>
           </div>
 
-          <Button onClick={handleOptimize} disabled={optimizing} className="w-full" size="lg">
+          <Button onClick={handleOptimize} disabled={optimizing} className="w-full" size="lg" data-testid="routes-optimize-btn">
             {optimizing ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Optimizing Route...
+                Marshrut tahlilanmoqda...
               </>
             ) : (
               <>
                 <Sparkles className="w-4 h-4 mr-2" />
-                Optimize Route
+                Marshrutni optimallashtirish
               </>
             )}
           </Button>
         </Card>
 
-        {/* Results */}
+        {/* Natijalar */}
         <div className="xl:col-span-2 space-y-6">
           {optimizing && (
             <Card className="p-8 flex flex-col items-center justify-center min-h-[400px]">
@@ -261,7 +258,7 @@ export default function RouteOptimizerPage() {
                 <Loader2 className="w-12 h-12 animate-spin text-primary" />
                 <Sparkles className="w-5 h-5 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <p className="text-sm text-muted-foreground mt-4 font-medium">Analyzing 7 optimization factors...</p>
+              <p className="text-sm text-muted-foreground mt-4 font-medium">7 optimallashtirish faktori tahlilanmoqda...</p>
               <div className="flex gap-2 mt-3 flex-wrap justify-center max-w-md">
                 {factors.map((f, i) => (
                   <Badge
@@ -283,16 +280,17 @@ export default function RouteOptimizerPage() {
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
                 <Navigation className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="font-semibold text-lg">Ready to optimize</h3>
+              <h3 className="font-semibold text-lg">Optimallashtirishga tayyor</h3>
               <p className="text-sm text-muted-foreground mt-1 max-w-sm">
-                Select your origin, destination, and cargo details, then click Optimize Route to get AI-powered recommendations.
+                Jo'nash nuqtasi, manzil va yuk tafsilotlarini tanlang, so'ng "Marshrutni optimallashtirish" tugmasini bosing —
+                AI tavsiyalarini olasiz.
               </p>
             </Card>
           )}
 
           {result && selectedRoute && (
             <>
-              {/* Route Selection Tabs */}
+              {/* Marshrut tanlash */}
               {allRoutes.length > 1 && (
                 <div className="flex gap-2 flex-wrap">
                   {allRoutes.map((route, idx) => (
@@ -305,15 +303,16 @@ export default function RouteOptimizerPage() {
                           ? 'border-primary bg-primary/5 text-primary'
                           : 'border-border hover:border-primary/50 text-muted-foreground'
                       )}
+                      data-testid={`routes-select-${idx}`}
                     >
-                      {idx === 0 ? 'Primary Route' : `Alternative ${idx}`}
+                      {idx === 0 ? 'Asosiy marshrut' : `${idx}-alternativa`}
                       <span className="ml-2 text-xs opacity-70">({route.overall_score}/10)</span>
                     </button>
                   ))}
                 </div>
               )}
 
-              {/* Map */}
+              {/* Xarita */}
               <Card className="p-5">
                 <div className="aspect-[8/5] w-full">
                   <UzbekistanMap
@@ -326,42 +325,38 @@ export default function RouteOptimizerPage() {
                 </div>
               </Card>
 
-              {/* Score Breakdown */}
+              {/* Ball tahlili */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Summary Card */}
                 <Card className="p-5">
                   <h3 className="font-semibold mb-4 flex items-center gap-2">
                     <TrendingUp className="w-4 h-4 text-primary" />
-                    Route Summary
+                    Marshrut xulosasi
                   </h3>
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-lg bg-secondary/50 p-3">
-                        <p className="text-xs text-muted-foreground">Distance</p>
-                        <p className="text-xl font-bold">{selectedRoute.total_distance} km</p>
-                      </div>
-                      <div className="rounded-lg bg-secondary/50 p-3">
-                        <p className="text-xs text-muted-foreground">Est. Time</p>
-                        <p className="text-xl font-bold">{Math.floor(selectedRoute.estimated_time)}h {Math.round((selectedRoute.estimated_time % 1) * 60)}m</p>
-                      </div>
-                      <div className="rounded-lg bg-secondary/50 p-3">
-                        <p className="text-xs text-muted-foreground">Est. Cost</p>
-                        <p className="text-xl font-bold">{selectedRoute.estimated_cost.toLocaleString()}</p>
-                        <p className="text-[10px] text-muted-foreground">UZS</p>
-                      </div>
-                      <div className="rounded-lg bg-primary/10 p-3">
-                        <p className="text-xs text-primary/70">Overall Score</p>
-                        <p className="text-xl font-bold text-primary">{selectedRoute.overall_score}/10</p>
-                      </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="rounded-lg bg-secondary/50 p-3">
+                      <p className="text-xs text-muted-foreground">Masofa</p>
+                      <p className="text-xl font-bold">{selectedRoute.total_distance} km</p>
+                    </div>
+                    <div className="rounded-lg bg-secondary/50 p-3">
+                      <p className="text-xs text-muted-foreground">Taxminiy vaqt</p>
+                      <p className="text-xl font-bold">{Math.floor(selectedRoute.estimated_time)} soat {Math.round((selectedRoute.estimated_time % 1) * 60)} daq</p>
+                    </div>
+                    <div className="rounded-lg bg-secondary/50 p-3">
+                      <p className="text-xs text-muted-foreground">Taxminiy xarajat</p>
+                      <p className="text-xl font-bold">{selectedRoute.estimated_cost.toLocaleString('uz-UZ')}</p>
+                      <p className="text-[10px] text-muted-foreground">so'm</p>
+                    </div>
+                    <div className="rounded-lg bg-primary/10 p-3">
+                      <p className="text-xs text-primary/70">Umumiy ball</p>
+                      <p className="text-xl font-bold text-primary">{selectedRoute.overall_score}/10</p>
                     </div>
                   </div>
                 </Card>
 
-                {/* 7 Factor Scores */}
                 <Card className="p-5">
                   <h3 className="font-semibold mb-4 flex items-center gap-2">
                     <Shield className="w-4 h-4 text-primary" />
-                    7-Factor Analysis
+                    7 faktor tahlili
                   </h3>
                   <div className="space-y-2.5">
                     {factors.map((factor) => {
@@ -378,14 +373,16 @@ export default function RouteOptimizerPage() {
                       return (
                         <div key={factor.key} className="flex items-center gap-3">
                           <factor.icon className={cn('w-3.5 h-3.5 shrink-0', factor.color)} />
-                          <span className="text-xs w-24 shrink-0">{factor.label}</span>
+                          <span className="text-xs w-28 shrink-0">{factor.label}</span>
                           <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
                             <div
-                              className={cn('h-full rounded-full transition-all', score >= 7 ? 'bg-green-500' : score >= 5 ? 'bg-amber-500' : 'bg-red-500')}
+                              className={cn('h-full rounded-full transition-all', score >= 7 ? 'bg-emerald-500' : score >= 5 ? 'bg-amber-500' : 'bg-red-500')}
                               style={{ width: `${score * 10}%` }}
                             />
                           </div>
-                          <span className="text-xs font-bold w-8 text-right">{score}</span>
+                          <Badge variant="secondary" className={cn('text-[10px] font-bold', scoreColor(score))}>
+                            {score} · {scoreLabel(score)}
+                          </Badge>
                         </div>
                       );
                     })}
@@ -393,12 +390,12 @@ export default function RouteOptimizerPage() {
                 </Card>
               </div>
 
-              {/* Rest Stops */}
+              {/* Dam olish maskanlari */}
               {selectedRoute.rest_stops.length > 0 && (
                 <Card className="p-5">
                   <h3 className="font-semibold mb-4 flex items-center gap-2">
                     <UtensilsCrossed className="w-4 h-4 text-primary" />
-                    Recommended Rest Stops
+                    Tavsiya etilgan dam olish maskanlari
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {selectedRoute.rest_stops.map((stop, idx) => (
@@ -408,7 +405,7 @@ export default function RouteOptimizerPage() {
                             <p className="font-medium text-sm">{stop.name}</p>
                             <p className="text-xs text-muted-foreground">{stop.address}</p>
                           </div>
-                          {stop.halal && <Badge variant="outline" className="text-[10px] text-green-600 border-green-600/30">Halal</Badge>}
+                          {stop.halal && <Badge variant="outline" className="text-[10px] text-emerald-600 border-emerald-600/30">Halol</Badge>}
                         </div>
                         <div className="flex items-center gap-2 mb-2">
                           <div className="flex items-center gap-0.5">
@@ -417,7 +414,7 @@ export default function RouteOptimizerPage() {
                             ))}
                           </div>
                           <span className="text-xs font-medium">{stop.rating}</span>
-                          <span className="text-xs text-muted-foreground">· {stop.distance_from_route}km from route</span>
+                          <span className="text-xs text-muted-foreground">· marshrutdan {stop.distance_from_route}km</span>
                         </div>
                         <div className="flex flex-wrap gap-1">
                           {stop.amenities.slice(0, 4).map((a) => (
@@ -430,12 +427,12 @@ export default function RouteOptimizerPage() {
                 </Card>
               )}
 
-              {/* Alerts */}
+              {/* Ogohlantirishlar */}
               {selectedRoute.alerts.length > 0 && (
                 <Card className="p-5">
                   <h3 className="font-semibold mb-4 flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-amber-500" />
-                    Route Alerts
+                    Marshrut ogohlantirishlari
                   </h3>
                   <div className="space-y-2">
                     {selectedRoute.alerts.map((alert, idx) => (
@@ -452,7 +449,9 @@ export default function RouteOptimizerPage() {
                         )} />
                         <div>
                           <p className="text-sm font-medium">{alert.description}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5 capitalize">{alert.type.replace(/_/g, ' ')} · {alert.distance_marker}km from origin</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            Boshlanishdan {alert.distance_marker}km uzoqda
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -460,14 +459,14 @@ export default function RouteOptimizerPage() {
                 </Card>
               )}
 
-              {/* AI Reasoning */}
+              {/* AI tahlil */}
               <Card className="p-5 bg-gradient-to-br from-primary/5 to-chart-2/5">
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                     <Sparkles className="w-4 h-4 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-sm mb-1">AI Analysis</h3>
+                    <h3 className="font-semibold text-sm mb-1">AI tahlili</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{result.reasoning}</p>
                   </div>
                 </div>
