@@ -64,6 +64,12 @@ export default function DriversPage() {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [rejectTarget, setRejectTarget] = useState<DriverApplication | null>(null);
   const [rejectReason, setRejectReason] = useState('');
+  const [approvedInfo, setApprovedInfo] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    needsEmailConfirmation: boolean;
+  } | null>(null);
 
   const isStaff = currentProfile?.role === 'admin' || currentProfile?.role === 'dispatcher';
 
@@ -213,11 +219,11 @@ export default function DriversPage() {
 
       // Supabase'da "Confirm email" yoqilgan bo'lsa, akkaunt tasdiqlanmagan holda yaratiladi
       const needsEmailConfirmation = !data.session;
-      toast({
-        title: 'Haydovchi tasdiqlandi',
-        description: needsEmailConfirmation
-          ? `${app.first_name} ${app.last_name} akkaunti yaratildi (${email}). Diqqat: Supabase'da "Confirm email" yoqilgan — haydovchi kirishi uchun uni o'chirish kerak.`
-          : `${app.first_name} ${app.last_name} endi ${email} va o'z paroli bilan tizimga kira oladi.`,
+      setApprovedInfo({
+        name: `${app.first_name} ${app.last_name}`,
+        email,
+        phone: app.phone,
+        needsEmailConfirmation,
       });
       await loadData();
     } catch (err: any) {
@@ -555,6 +561,64 @@ export default function DriversPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Tasdiqlangandan keyin kirish ma'lumotlari */}
+      <Dialog open={!!approvedInfo} onOpenChange={(open) => !open && setApprovedInfo(null)}>
+        <DialogContent data-testid="driver-approved-dialog">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+              Haydovchi tasdiqlandi
+            </DialogTitle>
+            <DialogDescription>
+              {approvedInfo?.name} uchun akkaunt yaratildi. Kirish ma&apos;lumotlarini haydovchiga
+              yetkazing (telefon: {approvedInfo?.phone}).
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-2 rounded-lg border border-border bg-secondary/40 p-3 text-sm">
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-muted-foreground shrink-0">Login (email):</span>
+              <code className="font-mono text-xs break-all text-right" data-testid="driver-approved-email">
+                {approvedInfo?.email}
+              </code>
+            </div>
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-muted-foreground shrink-0">Parol:</span>
+              <span className="text-xs text-right">
+                Haydovchi ariza topshirganda o&apos;zi kiritgan parol
+              </span>
+            </div>
+          </div>
+
+          {approvedInfo?.needsEmailConfirmation && (
+            <div className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 dark:border-amber-900/40 dark:bg-amber-900/10 px-3 py-2">
+              <Clock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-xs leading-relaxed">
+                <span className="font-medium">Diqqat:</span> Supabase&apos;da &laquo;Confirm email&raquo;
+                yoqilgan — haydovchi kira olishi uchun uni Authentication → Sign In / Providers →
+                Email bo&apos;limida o&apos;chirish kerak.
+              </p>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                if (approvedInfo?.email) navigator.clipboard?.writeText(approvedInfo.email);
+                toast({ title: 'Nusxa olindi', description: 'Login nusxa olindi.' });
+              }}
+              data-testid="driver-approved-copy-btn"
+            >
+              Loginni nusxalash
+            </Button>
+            <Button onClick={() => setApprovedInfo(null)} data-testid="driver-approved-close-btn">
+              Yopish
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={!!rejectTarget} onOpenChange={(open) => !open && setRejectTarget(null)}>        <DialogContent data-testid="driver-reject-dialog">
           <DialogHeader>

@@ -67,8 +67,7 @@ yo'l sifati, tezlik, xarajat, qulaylik, ishonchlilik, ovqat va dam olish.
   → backendga yuboriladi → muvaffaqiyat ekrani
 - `/login`, `/signup` — Supabase auth (signup'da 4 rol tanlanadi)
 
-### Dashboard (`/dashboard/*`, auth talab qiladi)
-- **`/dashboard`** — statistika kartalari, SVG marshrut xaritasi, avtopark holati, oxirgi buyurtmalar
+### Dashboard (`/dashboard/*`, auth talab qiladi)- **`/dashboard`** — statistika kartalari, SVG marshrut xaritasi, avtopark holati, oxirgi buyurtmalar
 - **`/dashboard/routes`** — marshrut optimizatori: shahar tanlash, yuk/transport turi,
   7 prioritet slayderi → asosiy marshrut + 2 alternativa, ball tahlili, dam olish
   maskanlari, ogohlantirishlar, AI xulosa
@@ -79,6 +78,26 @@ yo'l sifati, tezlik, xarajat, qulaylik, ishonchlilik, ovqat va dam olish.
   Kutilmoqda (tasdiqlash/rad etish) · Ro'yxat · Rad etilgan · **Xarita (Mapbox)**
 - **`/dashboard/analytics`** — recharts: holat donut, oylik xarajat, viloyat hajmi + KPI
 - **`/dashboard/settings`** — profil tahrirlash, parol o'zgartirish
+
+### Haydovchi kabineti (`/driver`, faqat kirgan foydalanuvchi)
+
+Mobil uchun mo'ljallangan alohida panel (sidebar yo'q, faqat yuqori panel):
+
+- **Statistika:** faol reyslar, yetkazilgan reyslar, bosib o'tilgan km, umumiy daromad
+- **Reyslar ro'yxati:** faqat `orders.driver_id = auth.uid()` bo'lgan buyurtmalar
+  (RLS `orders_select_participants` shuni ta'minlaydi)
+- **Filtrlar:** Faol / Yetkazilgan / Barchasi
+- **Holat o'zgartirish (2 qadam):**
+  - `assigned` → **«Yo'lga chiqdim»** → `in_transit`
+  - `in_transit` → **«Yetkazildi»** → `delivered` (+ `actual_arrival` yoziladi)
+  - RLS `orders_update_participants` haydovchiga o'z buyurtmasini yangilashga ruxsat beradi
+- **Marshrut xaritasi:** har bir reys kartasida «Marshrutni ko'rish» → Mapbox'da
+  jo'nash (yashil) va yetkazish (qizil) nuqtalari + punktir chiziq (`components/trip-mapbox.tsx`)
+- **Eslatmalar:** buyurtma `notes` maydoni sariq ogohlantirish sifatida ko'rsatiladi
+
+**Yo'naltirish:** `driver` roli bilan kirgan foydalanuvchi `/login` dan to'g'ridan-to'g'ri
+`/driver` ga tushadi; `/dashboard` ga kirsa ham avtomatik `/driver` ga qaytariladi.
+Admin/dispatcher sidebar'dagi «Haydovchi kabineti» havolasi orqali kabinetni ko'rib turishi mumkin.
 
 ### AI chatbot
 Dashboard yuqori panelidagi robot tugmasi → suzuvchi panel.
@@ -94,7 +113,11 @@ magistrallari, yoqilg'i narxi, dam olish maskanlari va 7-faktor metodikasi bor.
 4. **Tasdiqlash** → alohida (sessiyani buzmaydigan) Supabase klient bilan auth
    akkaunt yaratiladi: email = `{raqamlar}@drivers.karvonboshi.uz`, rol = `driver`.
    Ariza `approved` bo'ladi, parol bazadan o'chiriladi
-5. Haydovchi shu email + o'z paroli bilan `/login` orqali kiradi
+5. Haydovchi shu email + o'z paroli bilan `/login` orqali kiradi → **`/driver` kabinetiga tushadi**
+
+Tasdiqlashdan keyin admin ekranida **kirish ma'lumotlari dialogi** chiqadi
+(login email + nusxalash tugmasi) — admin uni haydovchiga yetkazadi.
+SMS yuborish qo'shilmagan (foydalanuvchi so'roviga ko'ra).
 
 ## Auth va rollar
 

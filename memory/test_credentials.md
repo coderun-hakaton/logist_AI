@@ -35,3 +35,18 @@ admin tasdiqlaydi, so'ng quyidagi shaklda kiradi:
 | Bobur Toshmatov | +998 90 308 50 68 | `haydovchi123` | Isuzu NPR 75 / 01 A 555 BB |
 
 Bu arizalarni `/dashboard/drivers` → "Kutilmoqda" tab'ida tasdiqlash yoki rad etish mumkin.
+
+## Haydovchi kabineti (`/driver`)
+
+Tasdiqlangandan keyin haydovchi yuqoridagi email + parol bilan kiradi va
+avtomatik `/driver` kabinetiga tushadi. Kabinetda:
+
+- o'ziga biriktirilgan reyslar (`orders.driver_id`)
+- **«Yo'lga chiqdim»** (assigned → in_transit) va **«Yetkazildi»** (in_transit → delivered) tugmalari
+- statistika: faol/yetkazilgan reyslar, km, daromad
+- har bir reys uchun Mapbox marshrut xaritasi
+
+**Kabinetni sinash uchun:** admin sifatida kirib, `/dashboard/orders` da buyurtma
+yaratayotganda "Haydovchi" maydonida tasdiqlangan haydovchini tanlang va holatni
+`Biriktirildi` qilib qo'ying. So'ng haydovchi hisobi bilan kirib `/driver` ni tekshiring.
+Admin/dispatcher sidebar'dagi «Haydovchi kabineti» havolasi orqali ham ko'rishi mumkin.

@@ -21,7 +21,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (user && profile) {
-      router.push('/dashboard');
+      router.push(profile.role === 'driver' ? '/driver' : '/dashboard');
     }
   }, [user, profile, router]);
 
@@ -38,11 +38,11 @@ export default function LoginPage() {
           : error,
         variant: 'destructive',
       });
+      setLoading(false);
     } else {
       toast({ title: 'Xush kelibsiz!', description: 'Tizimga muvaffaqiyatli kirdingiz.' });
-      router.push('/dashboard');
+      // Rol aniqlanishi bilan yuqoridagi useEffect to'g'ri sahifaga yo'naltiradi
     }
-    setLoading(false);
   };
 
   return (

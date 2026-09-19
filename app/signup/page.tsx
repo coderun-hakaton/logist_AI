@@ -33,7 +33,7 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (user && profile) {
-      router.push('/dashboard');
+      router.push(profile.role === 'driver' ? '/driver' : '/dashboard');
     }
   }, [user, profile, router]);
 
@@ -47,8 +47,8 @@ export default function SignupPage() {
       setAwaitingConfirmation(true);
       toast({ title: 'Deyarli tayyor!', description: 'Emailingizni tekshirib, akkauntni tasdiqlang.' });
     } else {
-      toast({ title: 'Akkaunt yaratildi!', description: "Karvonboshiga xush kelibsiz. Boshqaruv paneliga o'tyapmiz..." });
-      router.push('/dashboard');
+      toast({ title: 'Akkaunt yaratildi!', description: "Karvonboshiga xush kelibsiz. Sahifaga o'tyapmiz..." });
+      // Rol aniqlanishi bilan yuqoridagi useEffect to'g'ri sahifaga yo'naltiradi
     }
     setLoading(false);
   };

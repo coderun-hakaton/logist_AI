@@ -36,6 +36,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: '/dashboard/orders', label: 'Buyurtmalar', icon: Package },
     { href: '/dashboard/fleet', label: 'Avtopark', icon: Truck },
     { href: '/dashboard/drivers', label: 'Haydovchilar', icon: Users, staffOnly: true },
+    { href: '/driver', label: 'Haydovchi kabineti', icon: Truck, staffOnly: true },
     { href: '/dashboard/analytics', label: 'Tahlil', icon: BarChart3 },
     { href: '/dashboard/settings', label: 'Sozlamalar', icon: Settings },
   ].filter((item) => !item.staffOnly || isStaff);
@@ -43,10 +44,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
+      return;
     }
-  }, [user, loading, router]);
+    // Haydovchilar dispetcher paneliga emas, o'z kabinetiga tushadi
+    if (!loading && user && profile?.role === 'driver') {
+      router.push('/driver');
+    }
+  }, [user, profile, loading, router]);
 
-  if (loading || !user) {
+  if (loading || !user || profile?.role === 'driver') {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -96,7 +102,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               )}
-              data-testid={`nav-${item.href.replace('/dashboard/', '').replace('/dashboard', 'home')}`}
+              data-testid={`nav-${item.href === '/dashboard' ? 'home' : item.href.replace(/^\//, '').replace(/\//g, '-')}`}
             >
               <item.icon className="w-4 h-4 shrink-0" />
               {item.label}
